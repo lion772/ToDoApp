@@ -78,6 +78,9 @@ dependencies {
     // RecyclerView Animator
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
 
-    implementation 'androidx.cardview:cardview:1.0.0'
+    //Koin
+    implementation "org.koin:koin-core:2.1.4"
+    implementation "org.koin:koin-android:2.1.4"
+    implementation "org.koin:koin-androidx-viewmodel:2.1.4"
 
 }
