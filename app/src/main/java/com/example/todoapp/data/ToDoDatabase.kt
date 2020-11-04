@@ -14,8 +14,8 @@ abstract class ToDoDatabase: RoomDatabase() {
         @Volatile private var INSTANCE: ToDoDatabase? = null
         private val LOCK = Any()
 
-        fun getDatabase(context: Context) =
-            INSTANCE ?: kotlin.synchronized(this) {
+        operator fun invoke(context: Context) =
+            INSTANCE ?: synchronized(LOCK) {
                 INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }
 

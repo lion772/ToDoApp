@@ -14,4 +14,5 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="please_wait">Aguarde...</string>
+    <string name="no_data_retrieved">No data has been retrieved.</string>
 </resources>

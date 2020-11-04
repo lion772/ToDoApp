@@ -11,7 +11,7 @@ import com.example.todoapp.data.models.ToDoData
 interface ToDoDao {
 
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
-    fun getAllData(): LiveData<List<ToDoData>>
+    fun getAllData(): List<ToDoData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun inserData(toDoData: ToDoData)

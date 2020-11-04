@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.findFragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
 import com.example.todoapp.data.models.Priority
@@ -12,12 +15,18 @@ import kotlinx.android.synthetic.main.row_layout.view.*
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
-    var dataList = emptyList<ToDoData>()
+    var dataList = arrayListOf<ToDoData>()
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(position: Int){
             itemView.title_txt.text = dataList[position].title
             itemView.description_txt.text = dataList[position].description
+            itemView.row_background.setOnClickListener{
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+                findNavController(it.findFragment()).navigate(action)
+
+
+            }
 
             when(dataList[position].priority){
                 Priority.HIGH -> itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.red))
@@ -25,11 +34,11 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
                 Priority.LOW -> itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green))
             }
         }
-
     }
 
     fun setData(toDoData: List<ToDoData>){
-        this.dataList = toDoData
+        this.dataList.clear()
+        this.dataList = toDoData as ArrayList<ToDoData>
         notifyDataSetChanged()
     }
 
