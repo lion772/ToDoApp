@@ -15,4 +15,6 @@
     <string name="delete">Delete</string>
     <string name="please_wait">Aguarde...</string>
     <string name="no_data_retrieved">No data has been retrieved.</string>
+    <string name="successfully_added">Successfully added!</string>
+    <string name="please_fillout_fields">Please, fill out all fields required.</string>
 </resources>

@@ -46,6 +46,15 @@ class ToDoViewModel(application: Application,
         }
     }
 
+    fun updateData(toDoData: ToDoData){
+        _loading.value = true
+        viewModelScope.launch(Dispatchers.IO){
+            toDoRepository.updateData(toDoData)
+
+        }
+
+    }
+
     private fun dataRetrieved(toDoList: List<ToDoData>) {
         _data.postValue(toDoList)
         _dataLoadError.postValue(false)

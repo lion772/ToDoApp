@@ -9,7 +9,9 @@ class ToDoRepository(context: Context) {
 
     private val toDoDao by lazy { ToDoDatabase(context).toDoDao() }
 
-    fun getAllData():List<ToDoData>? = toDoDao.getAllData()
+    suspend fun getAllData():List<ToDoData>? = toDoDao.getAllData()
     suspend fun insertData(toDoData: ToDoData) = toDoDao.inserData(toDoData)
+    suspend fun updateData(toDoData: ToDoData) = toDoDao.updateData(toDoData)
+
 
 }

@@ -51,16 +51,21 @@ class AddFragment : Fragment() {
         if (validation) {
             newData = ToDoData(0, title, sharedViewModel.parsePriority(priority), description)
             toDoViewModel.insertData(newData)
-            Toast.makeText(activity, "Successfully added!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.successfully_added), Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
 
         }else{
-            Toast.makeText(activity, "Please, fill out all fields required.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.please_fillout_fields), Toast.LENGTH_SHORT).show()
         }
     }
 
     companion object{
-        
+        const val HIGH_PRIORITY = "High Priority"
+        const val MEDIUM_PRIORITY = "Medium Priority"
+        const val LOW_PRIORITY = "Low Priority"
+        const val FIRST_POSITION = 0
+        const val SECOND_POSITION = 1
+        const val THIRD_POSITION = 2
     }
 
 
