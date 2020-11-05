@@ -13,56 +13,60 @@ import com.example.todoapp.usecase.ToDoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ToDoViewModel(application: Application,
-                    private val toDoRepository: ToDoRepository
-): AndroidViewModel(application) {
+class ToDoViewModel(
+    application: Application,
+    private val toDoRepository: ToDoRepository
+) : AndroidViewModel(application) {
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
-
-    private val _dataLoadError = MutableLiveData<Boolean>()
-    val dataLoadError: LiveData<Boolean> get() = _dataLoadError
 
     private val _data = MutableLiveData<List<ToDoData>>()
     val data: LiveData<List<ToDoData>> get() = _data
 
 
-    fun insertData(toDoData: ToDoData){
+    fun insertData(toDoData: ToDoData) {
         viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.insertData(toDoData)
         }
     }
 
-    fun getAllData(){
+    fun getAllData() {
         _loading.value = true
-        viewModelScope.launch(Dispatchers.IO){
-            toDoRepository.getAllData()?.let {
-                val data = ToDoDatabase(getApplication()).toDoDao().getAllData()
-                dataRetrieved(data)
-            } ?: run {
-                dataNotRetrieved()
-            }
-
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = ToDoDatabase(getApplication()).toDoDao().getAllData()
+            dataRetrieved(data)
         }
     }
 
-    fun updateData(toDoData: ToDoData){
+    fun updateData(toDoData: ToDoData) {
         _loading.value = true
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.updateData(toDoData)
-
         }
+    }
 
+    fun deleteData(toDoData: ToDoData) {
+        _loading.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.deleteData(toDoData)
+            dataNotRetrieved()
+        }
+    }
+
+    fun deleteAllData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoRepository.deleteAllData()
+        }
     }
 
     private fun dataRetrieved(toDoList: List<ToDoData>) {
         _data.postValue(toDoList)
-        _dataLoadError.postValue(false)
         _loading.postValue(false)
     }
 
     private fun dataNotRetrieved() {
-        _dataLoadError.postValue(true)
+        _data.postValue(emptyList())
         _loading.postValue(false)
     }
 

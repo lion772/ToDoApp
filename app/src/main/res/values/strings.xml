@@ -13,8 +13,11 @@
     <string name="add">Add</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
-    <string name="please_wait">Aguarde...</string>
+    <string name="please_wait">Aguarde…</string>
     <string name="no_data_retrieved">No data has been retrieved.</string>
     <string name="successfully_added">Successfully added!</string>
     <string name="please_fillout_fields">Please, fill out all fields required.</string>
+    <string name="successfully_deleted">Successfully deleted!</string>
+    <string name="delete_everything_question">Delete everything ?</string>
+    <string name="are_you_sure">Are you sure you want to delete everything ?</string>
 </resources>

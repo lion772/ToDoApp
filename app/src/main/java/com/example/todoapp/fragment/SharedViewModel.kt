@@ -7,8 +7,11 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.todoapp.R
 import com.example.todoapp.data.models.Priority
+import com.example.todoapp.data.models.ToDoData
 import com.example.todoapp.fragment.add.AddFragment.Companion.FIRST_POSITION
 import com.example.todoapp.fragment.add.AddFragment.Companion.HIGH_PRIORITY
 import com.example.todoapp.fragment.add.AddFragment.Companion.LOW_PRIORITY
@@ -17,6 +20,13 @@ import com.example.todoapp.fragment.add.AddFragment.Companion.SECOND_POSITION
 import com.example.todoapp.fragment.add.AddFragment.Companion.THIRD_POSITION
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
+
+    private val _emptyDatabase = MutableLiveData<Boolean>()
+    val emptyDatabase: LiveData<Boolean> get() = _emptyDatabase
+
+    fun checkIfDatabaseEmpty(toDoData: List<ToDoData>){
+        _emptyDatabase.value = toDoData.isEmpty()
+    }
 
     val listener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) {}

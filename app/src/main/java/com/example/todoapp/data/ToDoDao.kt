@@ -10,8 +10,14 @@ interface ToDoDao {
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
     suspend fun getAllData(): List<ToDoData>
 
+    @Query("DELETE FROM todo_table ")
+    suspend fun deleteAllData()
+
     @Update
     suspend fun updateData(toDoData: ToDoData)
+
+    @Delete
+    suspend fun deleteData(toDoData: ToDoData)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun inserData(toDoData: ToDoData)
