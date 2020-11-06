@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todoapp.R
 import com.example.todoapp.data.viewmodel.ToDoViewModel
+import com.example.todoapp.databinding.FragmentListBinding
 import com.example.todoapp.fragment.SharedViewModel
 import com.example.todoapp.fragment.update.UpdateFragment
 import kotlinx.android.synthetic.main.dialog_progress.*
@@ -22,15 +23,19 @@ class ListFragment : Fragment() {
 
     private val toDoViewModel: ToDoViewModel by viewModel()
     private val sharedViewModel: SharedViewModel by viewModel()
+    private var dataBinding: FragmentListBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
-        setUpListener(view)
+        dataBinding = FragmentListBinding.inflate(inflater, container, false)
+        dataBinding?.let {
+            it.lifecycleOwner = this
+            it.sharedViewModel = sharedViewModel
+        }
         setHasOptionsMenu(true)
-        return view
+        return dataBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,11 +51,6 @@ class ListFragment : Fragment() {
             (recyclerView.adapter as ListAdapter).setData(dataList)
         }
 
-        sharedViewModel.emptyDatabase.observe(viewLifecycleOwner) {isEmpty ->
-            showEmptyDatabaseViews(isEmpty)
-        }
-
-
         toDoViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             isLoading?.let {
                 listProgressBar.visibility = if (it) View.VISIBLE else View.GONE
@@ -62,28 +62,10 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun showEmptyDatabaseViews(emptyDatabase: Boolean) {
-        if (emptyDatabase){
-            view?.no_data_imageView?.visibility = View.VISIBLE
-            view?.no_data_textView?.visibility = View.VISIBLE
-        } else {
-            view?.no_data_imageView?.visibility = View.GONE
-            view?.no_data_textView?.visibility = View.GONE
-        }
-    }
-
-
-
     private fun setUpAdapter() {
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            adapter = ListAdapter()
-        }
-    }
-
-    private fun setUpListener(view: View) {
-        view.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
+        dataBinding?.recyclerView?.let {recycler ->
+            recycler.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            recycler.adapter = ListAdapter()
         }
     }
 
@@ -102,8 +84,7 @@ class ListFragment : Fragment() {
         val builder = android.app.AlertDialog.Builder(context).also {
             it.setPositiveButton(YES) { _, _ ->
                 toDoViewModel.deleteAllData()
-                recyclerView.visibility = View.GONE
-                showEmptyDatabaseViews(true)
+                noDataFound()
                 context?.toast(getString(R.string.successfully_deleted))
             }.setNegativeButton(NO) { _, _ -> }
         }
@@ -113,6 +94,17 @@ class ListFragment : Fragment() {
             create()
             show()
         }
+    }
+
+    private fun noDataFound() {
+        recyclerView.visibility = View.GONE
+        no_data_imageView.visibility = View.VISIBLE
+        no_data_textView.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dataBinding = null
     }
 
     companion object {
