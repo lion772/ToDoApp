@@ -34,7 +34,7 @@ class ToDoViewModel(
     fun getAllData() {
         _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val data = ToDoDatabase(getApplication()).toDoDao().getAllData()
+            val data = toDoRepository.getAllData()
             dataRetrieved(data)
         }
     }

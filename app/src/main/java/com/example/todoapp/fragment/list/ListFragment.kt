@@ -72,6 +72,8 @@ class ListFragment : Fragment() {
         }
     }
 
+
+
     private fun setUpAdapter() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -101,7 +103,7 @@ class ListFragment : Fragment() {
             it.setPositiveButton(YES) { _, _ ->
                 toDoViewModel.deleteAllData()
                 recyclerView.visibility = View.GONE
-
+                showEmptyDatabaseViews(true)
                 context?.toast(getString(R.string.successfully_deleted))
             }.setNegativeButton(NO) { _, _ -> }
         }
