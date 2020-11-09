@@ -2,11 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<data>
+    <data>
         <variable
             name="toDoData"
             type="com.example.todoapp.data.models.ToDoData" />
-    </data>-->
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_height="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="@color/red"
+                android:parsePriorityColor="@{toDoData.priority}"
                 app:cardCornerRadius="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
-                android:text="My Title"
+                android:text="@{toDoData.title}"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/priority_indicator"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="Description"
+                android:text="@{toDoData.description}"
                 android:maxLength="300"
                 android:maxLines="10"
                 android:textColor="@android:color/darker_gray"

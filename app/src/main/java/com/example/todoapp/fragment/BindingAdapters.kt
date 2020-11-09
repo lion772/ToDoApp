@@ -2,6 +2,8 @@ package com.example.todoapp.fragment
 
 import android.view.View
 import android.widget.Spinner
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +12,7 @@ import com.example.todoapp.R
 import com.example.todoapp.data.models.Priority
 import com.example.todoapp.fragment.add.AddFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.row_layout.view.*
 
 class BindingAdapters {
 
@@ -41,6 +44,16 @@ class BindingAdapters {
                 Priority.HIGH -> spinner.setSelection(0)
                 Priority.MEDIUM -> spinner.setSelection(1)
                 Priority.LOW -> spinner.setSelection(2)
+            }
+        }
+
+        @BindingAdapter("android:parsePriorityColor")
+        @JvmStatic
+        fun parsePriorityColor(view: CardView, priority: Priority) {
+            when (priority) {
+                Priority.HIGH -> view.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(view.context, R.color.red))
+                Priority.MEDIUM -> view.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(view.context, R.color.yellow))
+                Priority.LOW -> view.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(view.context, R.color.green))
             }
         }
     }
