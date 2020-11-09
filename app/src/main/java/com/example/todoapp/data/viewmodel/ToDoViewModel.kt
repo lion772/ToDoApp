@@ -9,7 +9,6 @@ import com.example.todoapp.data.ToDoDao
 import com.example.todoapp.data.ToDoDatabase
 import com.example.todoapp.data.models.ToDoData
 import com.example.todoapp.data.repository.ToDoRepository
-import com.example.todoapp.usecase.ToDoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

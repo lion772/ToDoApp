@@ -18,6 +18,8 @@ import com.example.todoapp.fragment.add.AddFragment.Companion.LOW_PRIORITY
 import com.example.todoapp.fragment.add.AddFragment.Companion.MEDIUM_PRIORITY
 import com.example.todoapp.fragment.add.AddFragment.Companion.SECOND_POSITION
 import com.example.todoapp.fragment.add.AddFragment.Companion.THIRD_POSITION
+import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.fragment_list.view.*
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
 
@@ -53,5 +55,11 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
             LOW_PRIORITY -> Priority.LOW
             else -> Priority.HIGH
         }
+    }
+
+    fun dataNotFound(view: View) {
+        view.recyclerView.visibility = View.GONE
+        view.no_data_imageView.visibility = View.VISIBLE
+        view.no_data_textView.visibility = View.VISIBLE
     }
 }

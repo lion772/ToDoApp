@@ -7,7 +7,6 @@ import com.example.todoapp.fragment.SharedViewModel
 import com.example.todoapp.fragment.add.AddFragment
 import com.example.todoapp.fragment.list.ListFragment
 import com.example.todoapp.fragment.update.UpdateFragment
-import com.example.todoapp.usecase.ToDoUseCase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import kotlin.math.sin
@@ -19,7 +18,6 @@ object Module {
         single { AddFragment() }
         single { UpdateFragment() }
         single { ToDoRepository(context = get()) }
-        single { ToDoUseCase(toDoRepository = get()) }
         viewModel { ToDoViewModel(application = get(), toDoRepository = get()) }
         viewModel { SharedViewModel(application = get()) }
     }

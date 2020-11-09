@@ -2,19 +2,13 @@ package com.example.todoapp.fragment.list
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todoapp.R
 import com.example.todoapp.data.viewmodel.ToDoViewModel
 import com.example.todoapp.databinding.FragmentListBinding
 import com.example.todoapp.fragment.SharedViewModel
-import com.example.todoapp.fragment.update.UpdateFragment
-import kotlinx.android.synthetic.main.dialog_progress.*
 import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.android.synthetic.main.fragment_list.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import williamlopes.project.rtcontrol.helper.extension.toast
 
@@ -84,7 +78,7 @@ class ListFragment : Fragment() {
         val builder = android.app.AlertDialog.Builder(context).also {
             it.setPositiveButton(YES) { _, _ ->
                 toDoViewModel.deleteAllData()
-                noDataFound()
+                view?.let { view -> sharedViewModel.dataNotFound(view) }
                 context?.toast(getString(R.string.successfully_deleted))
             }.setNegativeButton(NO) { _, _ -> }
         }
@@ -94,12 +88,6 @@ class ListFragment : Fragment() {
             create()
             show()
         }
-    }
-
-    private fun noDataFound() {
-        recyclerView.visibility = View.GONE
-        no_data_imageView.visibility = View.VISIBLE
-        no_data_textView.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

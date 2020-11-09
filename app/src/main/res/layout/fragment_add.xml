@@ -32,17 +32,14 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/description_et"
+        app:layout_constraintStart_toStartOf="@+id/title_et"
         app:layout_constraintTop_toBottomOf="@+id/title_et" />
 
     <EditText
         android:id="@+id/description_et"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="400dp"
         android:background="@drawable/custom_input"
         android:ems="10"
         android:gravity="top|start"
@@ -53,8 +50,9 @@
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/title_et"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner" />
+        app:layout_constraintStart_toStartOf="@+id/title_et"
+        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner"
+        app:layout_constraintVertical_bias="0.050000012" />
 </androidx.constraintlayout.widget.ConstraintLayout>
