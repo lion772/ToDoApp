@@ -1,47 +1,36 @@
-package com.example.todoapp.fragment.list
+package com.example.todoapp.fragment.list.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.findFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
-import com.example.todoapp.data.models.Priority
 import com.example.todoapp.data.models.ToDoData
 import com.example.todoapp.databinding.RowLayoutBinding
+import com.example.todoapp.fragment.list.ListFragmentDirections
 import kotlinx.android.synthetic.main.row_layout.view.*
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
-    var dataList = arrayListOf<ToDoData>()
+    var dataList = emptyArray<ToDoData>()
 
     inner class MyViewHolder(var binding:RowLayoutBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             binding.toDoData = dataList[position]
             binding.executePendingBindings()
 
-            /*itemView.title_txt.text = dataList[position].title
-            itemView.description_txt.text = dataList[position].description*/
             itemView.row_background.setOnClickListener{
-                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+                val action =
+                    ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
                 findNavController(it.findFragment()).navigate(action)
             }
-
-            /*when(dataList[position].priority){
-                Priority.HIGH -> itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.red))
-                Priority.MEDIUM -> itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.yellow))
-                Priority.LOW -> itemView.priority_indicator.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.green))
-            }*/
         }
     }
 
     fun setData(toDoData: List<ToDoData>){
-        this.dataList.clear()
-        this.dataList = toDoData as ArrayList<ToDoData>
+        this.dataList = toDoData.toTypedArray()
         notifyDataSetChanged()
     }
 

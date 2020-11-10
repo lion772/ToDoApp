@@ -49,7 +49,7 @@ class ToDoViewModel(
         _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.deleteData(toDoData)
-            dataNotRetrieved()
+            _loading.postValue(false)
         }
     }
 
