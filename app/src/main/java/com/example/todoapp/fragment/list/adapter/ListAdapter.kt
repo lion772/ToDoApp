@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.findFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
 import com.example.todoapp.data.models.ToDoData
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.row_layout.view.*
 
 class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
-    var dataList = emptyArray<ToDoData>()
+    var dataList = emptyList<ToDoData>()
 
     inner class MyViewHolder(var binding:RowLayoutBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
@@ -30,8 +31,10 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
     }
 
     fun setData(toDoData: List<ToDoData>){
-        this.dataList = toDoData.toTypedArray()
-        notifyDataSetChanged()
+        val toDoDiffUtil = ToDoDiffUtil(dataList, toDoData)
+        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
+        this.dataList = toDoData
+        toDoDiffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

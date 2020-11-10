@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
+import com.example.todoapp.data.models.ToDoData
 import com.example.todoapp.data.viewmodel.ToDoViewModel
 import com.example.todoapp.databinding.FragmentListBinding
 import com.example.todoapp.fragment.SharedViewModel
 import com.example.todoapp.fragment.list.adapter.ListAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import williamlopes.project.rtcontrol.helper.extension.toast
@@ -21,6 +23,7 @@ class ListFragment : Fragment() {
     private val toDoViewModel: ToDoViewModel by viewModel()
     private val sharedViewModel: SharedViewModel by viewModel()
     private var dataBinding: FragmentListBinding? = null
+    private val listAdapter by lazy { dataBinding?.recyclerView?.adapter as ListAdapter }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,14 +98,23 @@ class ListFragment : Fragment() {
     private fun swipeToDelete(recyclerView: RecyclerView?) {
         val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val itemToDelete =
-                    (recyclerView?.adapter as ListAdapter).dataList[viewHolder.adapterPosition]
-                toDoViewModel.deleteData(itemToDelete)
-                context?.toast(getString(R.string.successfully_deleted))
+                val deletedItem = listAdapter.dataList[viewHolder.adapterPosition]
+                toDoViewModel.deleteData(deletedItem)
+                retoreDeletedData(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun retoreDeletedData(view: View, deletedItem: ToDoData, position: Int) {
+        val snackbar = Snackbar.make(view, "Deleted ${deletedItem.title}", Snackbar.LENGTH_LONG)
+        snackbar.setAction(UNDO) {
+            toDoViewModel.insertData(deletedItem)
+            listAdapter.notifyItemChanged(position)
+        }
+        snackbar.show()
+
     }
 
     override fun onDestroyView() {
@@ -113,6 +125,7 @@ class ListFragment : Fragment() {
     companion object {
         private const val YES = "Yes"
         private const val NO = "No"
+        private const val UNDO = "Undo"
     }
 
 }
