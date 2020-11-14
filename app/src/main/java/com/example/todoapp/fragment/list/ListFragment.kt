@@ -2,6 +2,7 @@ package com.example.todoapp.fragment.list
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,12 +14,14 @@ import com.example.todoapp.databinding.FragmentListBinding
 import com.example.todoapp.fragment.SharedViewModel
 import com.example.todoapp.fragment.list.adapter.ListAdapter
 import com.google.android.material.snackbar.Snackbar
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.fragment_list.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import williamlopes.project.rtcontrol.helper.extension.toast
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val toDoViewModel: ToDoViewModel by viewModel()
     private val sharedViewModel: SharedViewModel by viewModel()
@@ -62,15 +65,23 @@ class ListFragment : Fragment() {
 
     private fun setUpAdapter() {
         dataBinding?.recyclerView?.let { recycler ->
-            recycler.layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            recycler.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
             recycler.adapter = ListAdapter()
             swipeToDelete(recyclerView)
+
+            recycler.itemAnimator = SlideInUpAnimator().apply {
+                addDuration = 300
+            }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
+        val search = menu.findItem(R.id.menu_search)
+
+        val searchView = search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -100,6 +111,7 @@ class ListFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val deletedItem = listAdapter.dataList[viewHolder.adapterPosition]
                 toDoViewModel.deleteData(deletedItem)
+                //listAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                 retoreDeletedData(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
             }
         }
@@ -111,7 +123,7 @@ class ListFragment : Fragment() {
         val snackbar = Snackbar.make(view, "Deleted ${deletedItem.title}", Snackbar.LENGTH_LONG)
         snackbar.setAction(UNDO) {
             toDoViewModel.insertData(deletedItem)
-            listAdapter.notifyItemChanged(position)
+            //listAdapter.notifyItemChanged(position)
         }
         snackbar.show()
 
@@ -126,6 +138,31 @@ class ListFragment : Fragment() {
         private const val YES = "Yes"
         private const val NO = "No"
         private const val UNDO = "Undo"
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null){
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null){
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+    private fun searchThroughDatabase(query: String) {
+        val searchQuery = "%$query%"
+        toDoViewModel.searchDatabase(searchQuery).observe(this){ list->
+            list?.let {
+                listAdapter.setData(it)
+            }
+
+        }
+
     }
 
 }

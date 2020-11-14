@@ -22,5 +22,8 @@ interface ToDoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun inserData(toDoData: ToDoData)
 
+    @Query("SELECT * FROM todo_table WHERE title LIKE :searchQuery")
+    fun searchDatabase(searchQuery:String): LiveData<List<ToDoData>>
+
 
 }

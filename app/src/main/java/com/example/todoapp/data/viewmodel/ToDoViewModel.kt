@@ -64,9 +64,6 @@ class ToDoViewModel(
         _loading.postValue(false)
     }
 
-    private fun dataNotRetrieved() {
-        _data.postValue(emptyList())
-        _loading.postValue(false)
-    }
+    fun searchDatabase(searchQuery:String) = toDoRepository.searchDatabase(searchQuery)
 
 }

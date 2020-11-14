@@ -14,5 +14,6 @@ class ToDoRepository(context: Context) {
     suspend fun updateData(toDoData: ToDoData) = toDoDao.updateData(toDoData)
     suspend fun deleteData(toDoData: ToDoData) = toDoDao.deleteData(toDoData)
     suspend fun deleteAllData() = toDoDao.deleteAllData()
+    fun searchDatabase(searchQuery: String) = toDoDao.searchDatabase(searchQuery)
 
 }
