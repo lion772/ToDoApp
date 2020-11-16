@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.*
 import com.example.todoapp.R
 import com.example.todoapp.data.models.ToDoData
 import com.example.todoapp.data.viewmodel.ToDoViewModel
@@ -65,7 +64,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun setUpAdapter() {
         dataBinding?.recyclerView?.let { recycler ->
-            recycler.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+            recycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             recycler.adapter = ListAdapter()
             swipeToDelete(recyclerView)
 
@@ -87,6 +86,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_delete_all -> confirmDelete()
+            R.id.menu_priority_high -> toDoViewModel.sortByHighPriority.observe(this){ listAdapter.setData(it) }
+            R.id.menu_priority_low -> toDoViewModel.sortByLowPriority.observe(this){ listAdapter.setData(it) }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -160,9 +161,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             list?.let {
                 listAdapter.setData(it)
             }
-
         }
-
     }
 
 }

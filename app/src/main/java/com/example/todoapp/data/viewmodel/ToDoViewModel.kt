@@ -23,11 +23,16 @@ class ToDoViewModel(
     private val _data = MutableLiveData<List<ToDoData>>()
     val data: LiveData<List<ToDoData>> get() = _data
 
+    val sortByHighPriority: LiveData<List<ToDoData>> = toDoRepository.sortByHighPriority
+    val sortByLowPriority: LiveData<List<ToDoData>> = toDoRepository.sortByLowPriority
+
 
     fun insertData(toDoData: ToDoData) {
+        _loading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.insertData(toDoData)
         }
+        _loading.postValue(false)
     }
 
     fun getAllData() {
@@ -36,6 +41,7 @@ class ToDoViewModel(
             val data = toDoRepository.getAllData()
             dataRetrieved(data)
         }
+        _loading.postValue(false)
     }
 
     fun updateData(toDoData: ToDoData) {
@@ -43,6 +49,7 @@ class ToDoViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             toDoRepository.updateData(toDoData)
         }
+        _loading.postValue(false)
     }
 
     fun deleteData(toDoData: ToDoData) {
