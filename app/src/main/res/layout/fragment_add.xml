@@ -39,7 +39,8 @@
     <EditText
         android:id="@+id/description_et"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/custom_input"
         android:ems="10"
         android:gravity="top|start"
@@ -53,6 +54,5 @@
         app:layout_constraintEnd_toEndOf="@+id/title_et"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/title_et"
-        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner"
-        app:layout_constraintVertical_bias="0.050000012" />
+        app:layout_constraintTop_toBottomOf="@+id/priorities_spinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>
